@@ -1,0 +1,16 @@
+BLASTS finished running:
+kpneumoniae - PLASMIDS & NO PLASMIDS 
+salmonella - NO PLASMIDS !!! 
+[2]   Done                    blastp -db parsed85kpneumoniae_seqs -query 85kpneumoniae.faa -out allvsall_wotransposase_softmask_sw2 -evalue 5e-2 -outfmt '7 qseqid qlen qstart qend length sseqid slen qcovs score bitscore evalue' -soft_masking true -use_sw_tback  (wd: ~/bacteria_assembly/k_pneumoniae/gbk/ncbi-genomes-2017-07-13/getfeaturesprot)
+(wd now: ~/ncbi-genomes-2017-06-28/testruns/5testrun/getfeaturesprot)
+[3]-  Done                    blastp -db parsed98salmonella -query 98salmonella.faa -out allvsall_wotransposase_softmask_sw -evalue 5e-2 -outfmt '7 qseqid qlen qstart qend length sseqid slen qcovs score bitscore evalue' -soft_masking true -use_sw_tback  (wd: ~/ncbi-genomes-2017-06-28/no_plasmids/getfeatures)
+(wd now: ~/ncbi-genomes-2017-06-28/testruns/5testrun/getfeaturesprot)
+
+[12]+  Done                    blastp -db parsed91kpneumoniae -query 91kpneumoniae.faa -out allvsall_wotransposase_softmask_sw -evalue 5e-2 -outfmt '7 qseqid qlen qstart qend length sseqid slen qcovs score bitscore evalue' -soft_masking true -use_sw_tback  (wd: ~/bacteria_assembly/k_pneumoniae/gbk/ncbi-genomes-2017-07-13/noplasmid/getfeatures)
+(wd now: ~/ncbi-genomes-2017-06-28/getfeaturesprot)
+
+JOBS LEFT:
+[1]-  Running                 blastp -db /1/scratch/blastdb/nr -query proteinseqlist.txt -out salmtestblast.out -evalue 0.05 -parse_deflines -outfmt '7 qseqid qlen qstart qend length sseqid slen qcovs score bitscore evalue stitle sallseqid salltitles' -soft_masking true -use_sw_tback &  (wd: /1/scratch/ann/gfam2)
+[8]+  Running                 blastp -db parsed102ecoli -query 102ecolinodup.faa -out allvsall_wotransposase_softmask_sw -evalue 5e-2 -outfmt '7 qseqid qlen qstart qend length sseqid slen qcovs score bitscore evalue' -soft_masking true -use_sw_tback &  (wd: ~/old_bacteria/coli/gbk/getfeatures)
+
+R files are still running...forever...
