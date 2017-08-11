@@ -14,3 +14,63 @@ JOBS LEFT:
 [8]+  Running                 blastp -db parsed102ecoli -query 102ecolinodup.faa -out allvsall_wotransposase_softmask_sw -evalue 5e-2 -outfmt '7 qseqid qlen qstart qend length sseqid slen qcovs score bitscore evalue' -soft_masking true -use_sw_tback &  (wd: ~/old_bacteria/coli/gbk/getfeatures)
 
 R files are still running...forever...
+
+TRACKING - AVAILABLE FILES
+
+Five random Salmonella species:
+  * blastp (output.txt)
+  * genefamily11.R Rdata output file (salmtest.Rdata)
+  * genefamily11.pl Rdata output file (salmtest_genfamperlout.txt)
+  * presenceAbsence output files (presenceabsence.Rdata & presenceabsence.csv)
+
+Salmonella:
+  PLASMID
+  
+  NO PLASMID:
+   
+S. aureus:
+  PLASMID
+  
+  NO PLASMID:
+  
+E. coli:
+  PLASMID
+  
+  NO PLASMID:
+  
+S. pyogenes:
+  PLASMID
+  
+  NO PLASMID:
+
+Y. pestis:
+  PLASMID
+  
+  NO PLASMID:
+  
+H. pylori:
+  PLASMID
+  
+  NO PLASMID:
+  
+C. jejuni:
+  PLASMID
+  
+  NO PLASMID:
+  
+K. pneumoniae:
+  PLASMID
+  
+  NO PLASMID:
+  
+L. monocytogenes:
+  PLASMID
+  
+  NO PLASMID:
+  
+M. tuberculosis:
+  PLASMID
+  
+  NO PLASMID:
+  
+
