@@ -9,7 +9,7 @@ salmonella - NO PLASMIDS !!!
 [12]+  Done                    blastp -db parsed91kpneumoniae -query 91kpneumoniae.faa -out allvsall_wotransposase_softmask_sw -evalue 5e-2 -outfmt '7 qseqid qlen qstart qend length sseqid slen qcovs score bitscore evalue' -soft_masking true -use_sw_tback  (wd: ~/bacteria_assembly/k_pneumoniae/gbk/ncbi-genomes-2017-07-13/noplasmid/getfeatures)
 (wd now: ~/ncbi-genomes-2017-06-28/getfeaturesprot)
 
-JOBS LEFT:
+JOBS - BOTH FINISHED NOW AS WELL!
 [1]-  Running                 blastp -db /1/scratch/blastdb/nr -query proteinseqlist.txt -out salmtestblast.out -evalue 0.05 -parse_deflines -outfmt '7 qseqid qlen qstart qend length sseqid slen qcovs score bitscore evalue stitle sallseqid salltitles' -soft_masking true -use_sw_tback &  (wd: /1/scratch/ann/gfam2)
 [8]+  Running                 blastp -db parsed102ecoli -query 102ecolinodup.faa -out allvsall_wotransposase_softmask_sw -evalue 5e-2 -outfmt '7 qseqid qlen qstart qend length sseqid slen qcovs score bitscore evalue' -soft_masking true -use_sw_tback &  (wd: ~/old_bacteria/coli/gbk/getfeatures)
 
