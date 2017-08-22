@@ -1,0 +1,54 @@
+\documentclass[12pt]{article}
+%%%%%%Preamble%%%%%%%%%%
+\usepackage{scrtime} % for \thistime (this package MUST be listed first!)
+\usepackage{fancyhdr}
+\usepackage{xspace} %for having the perfect spacing after new commands
+\usepackage{xcolor,colortbl}%for changing cell colour in tables
+\usepackage{booktabs} %for tables
+\usepackage{graphicx}
+\usepackage{listings}
+%\usepackage{Sweave}
+%%%%formating the page%%%%
+\pagestyle{fancy}
+
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue,filecolor=magenta,urlcolor=cyan,}
+\urlstyle{same}
+
+
+\setlength{\headheight}{15.2pt}
+\setlength{\headsep}{13 pt}
+\setlength{\parindent}{28 pt}
+\setlength{\parskip}{12 pt}
+\pagestyle{fancyplain}
+\usepackage[T1]{fontenc}
+\rhead{\fancyplain{}{Pangenome Thesis $|$  \today \hfill Ann Le}} %insert your name here and your document title. the \today will just put the date that you compiled the documnet there.
+\renewcommand\headrulewidth{0.5mm}
+%%%%%%%%%%%%%%%%%%%%%%
+%you can make new commands so you dont have to keep typing out (for example) the same bacteria name
+%to use it in your text you just type \tub 
+\newcommand{\salm}{\textit{Salmonella}\xspace}
+\newcommand{\saur}{\textit{S.\,aureus}\xspace}
+\newcommand{\bas}{\textit{Bacillus subtilis}\xspace}
+\newcommand{\strep}{\textit{Streptomyces}\xspace}
+\newcommand{\ecol}{\textit{E.\,coli}\xspace}
+\providecommand{\e}[1]{\ensuremath{\times 10^{#1}}}
+%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+
+\bigskip	
+	
+\section*{Two Weeks Ago}
+
+\begin{itemize} 
+
+\item Mostly file organization and getting the github ready and started. Bacterial 
+files were being tracked and the remaining blastp runs should be completed over the
+time that I was away. 
+
+\end{itemize}
+
+\section*{This Week}
+
+\end{document}

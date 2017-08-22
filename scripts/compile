@@ -1,0 +1,7 @@
+#!/bin/bash
+
+#bibtex $1
+latex $1.tex
+pdflatex $1.tex
+#ac $1.pdf
+

@@ -1,0 +1,243 @@
+------------
+Pipeline for creating a gene family
+------------
+
+1) blastp allspecies vs allspecies
+#Reciprocal blastp search for finding significant hits. Here, an
+evalue of 0.05 is used. While using such an evalue will take longer,
+it would also mean that most genes should hit themselves. I used the
+following commands:
+
+perl downloadseq_aa.pl
+#This downloaded all amino acid coding sequences from ncbi. I used eutils.
+
+cat myco*.fna > 10mycogenomes.fna
+#This concatenated all genomes into 1 file.
+
+Anything with mobile elements, viral elements, prophages, insertion
+sequences (IS2404, IS2406), etc. were weeded out. For my data,
+insertion sequences (often represented by a IS sequence), prophages,
+phages (but not macrophages, e.g., macrophage infection protein should
+be left in), and transposases were found. Searched for "mobile" and
+"viral" keywords. Nothing. Also, note that I am not using an external
+tool to figure out insertion sequences and prophages, which is indeed
+possible. I am relying on the annotation in the genbank sequences. I
+manually deleted sequences that had prophage in the genbank
+annotation, followed by insertion sequences, followed by IS*
+sequences. I basically used /prophage, /phage, /insertion in vim.
+Unfortunately, there does not seem to be a safe way to do it
+automatically, as there are sequences corresponding to protein
+insertion sequences, membrane protein insertion efficiency factor,
+etc. For IS* sequences, I searched and removed as appropriate (googled
+if they were known;
+https://www-is.biotoul.fr/is/IS_infos/is_family.html can be helpful as
+well; in general, most sequences with IS in them were in fact
+insertion sequences. Asked Brian when I was not sure)
+:/^>lcl|.*IS/
+in vim. Lastly, woleftovertransposase.pl was used to remove any
+sequences associated with transposases.
+
+makeblastdb -in 10mycogenomeswotransposase_seqs.fna -out
+parsed10mycogenomeswotransposase_seqs -dbtype prot -parse_seqids
+#This created a custom blast database that I will end up using for my
+local blast search. The parse_seqids option was quite important for
+later.
+
+blastp -db parsed10mycogenomeswotransposase_seqs -query
+10mycogenomeswotransposase_seqs.fna -out
+allvsall_wotransposase_softmask_sw -evalue 5e-2 -num_threads 10
+-outfmt '7 qseqid qlen qstart qend length sseqid slen qcovs score
+bitscore evalue' -soft_masking true -use_sw_tback &
+#This runs an all vs all blast. I am outputting query sequence id, query
+length, start of alignment in query, end of alignment in query, length
+of alignment, subject sequence id, subject length, query coverage,
+bitscore, and evalue for each hit in a tabular format. The threshold
+evalue used for reporting results was 0.05. Moreover, soft masking was
+employed, i.e., sequences with low information content were filtered
+out during the "finding potential matches" stage (the first stage. For
+the second stage, the alignment stage, the low information content is
+not filtered out during alignment from potential matches). Lastly,
+Smith-Waterman was used for the final alignment (after X-drop).
+
+2) perl listofgenesindb.pl 10mycogenomeswotransposase_seqs.fna
+#writes to listofallgenes.txt. This is a list of all genes. At the end
+of the first gene family code run, the difference between the two sets
+determines what genes to run against the NR database.
+
+3) perl filter85query.pl allvsall_wotransposase_softmask_sw
+#writes to outputwolessthan85.txt. Basically, removes any hits with
+match lengths (part of the query in the alignment - no gaps) less than
+85% of the query length.
+
+4) perl removehitstosamegene.pl outputwolessthan85.txt
+#writes to outputwohitstosamegene.txt. Basically, removes the hit of
+the gene to itself.
+
+6) perl qspandsubspecies.pl outputwohitstosamegene.txt
+#writes formatted output to output.txt. This can, of course, be done
+in R using gsub (using \\ with |), strsplit, etc. but perl is faster
+and uses less memory. Only necessary due to structuring of R code. At
+some later point, if the R code is adjusted, this step might be
+removed.
+
+7) R --vanilla <genefamily11.R> genefamily11.out &
+R code to determine gene families called genefamily11.R.
+This code puts together two genes (A and B from genome 1 and 2,
+respectively) having reciprocal blast hits as each other in one
+family. Now, it continues on and might find that genes B and F from
+genome 2 and 5, respectively are each other's best blast hits. Hence,
+now genes A, B, and F from genomes 1, 2, and 5 are in a gene family.
+Now, the algorithm continues and finds gene F from genome 5 has gene U
+from genome 1 as a reciprocal blast hit. Hence, now genes A, B, F, and
+U from species 1, 2, 5, and 1 are in a gene family. Here, genes A and
+U are inferred to be homologs in the same species and to avoid paralog
+effects, are clustered in the same family. Repeat this for all
+possible combinations. This gives lists of genes that belong to the
+same gene family. Corresponding to this, we also have lists of the
+corresponding taxa names for each gene family. For now, this R program
+only prints out the genes that had no hits: some with no hits in
+blastp and others with membership only in 1 species (that is, no
+reciprocal hits were found). These are printed out into a file called
+genesforNR.txt and the R session image is saved in gfcode1.Rdata.
+
+8) Extract 50 gene families. These have genes belonging to each taxa,
+i.e., 50 genes from, for example, 10 taxa will be extracted. Each of
+the 50 genes in the same order are aligned using MAFFT and then pasted
+together line by line and then a fna file of this alignment is
+provided to mrbayes. I used the following R program:
+genesforalignment_individualgenes.R
+This program needs to have gfcode1.Rdata loaded into memory. Then, a
+combination of the gene family gene names and gene family taxa names
+lists are used. Using gnamfam guarantees 10 genes overall, i.e., no
+paralogues, etc. We are going after core genes here. However, because
+there could be multiple genes from the same genome and the length
+equal to 10 condition can still be satisfied, gfam_unique is also
+used. This means that 10 unique genes from each of the 10 genomes will
+be found.The first 50 of such genes are used, i.e., 50 genes with only
+1 corresponding gene for each taxa are used. A matrix containing 50
+gene names in a column for each taxa are created and then sorted to
+ensure that the ordering of the taxa for these 50 genes is the same
+throughout. These are then output in files called
+Gfagenome_ind_[1..50]. These files contain genes for each taxa in a
+format (e.g., CP000656.1_cdsid_ABP43311.1_815) such that blastcmddb
+can be easily called. This is why the parse_seqids option was
+important earlier.
+
+9) Now, call ./creategenefileforalign.sh. This script executes a call
+to the blast db with blastdbcmd. Note that here, I am getting
+nucleotide sequences back. So, I downloaded all the cds in nucleotide
+format using
+perl downloadseq_na.pl
+and concatenated these and made a custom database as before (except
+this time it is a nucleotide database). We are using nucleotide
+sequences because these genomes are very closely related and there is
+no 1 to 1 mapping back from proteins to nucleotides (the converse is
+true though). Anyway, the shell file queries the custom blast database
+created earlier using blastdbcmd and writes out all the sequences
+found in a file called $1seqs.fna, for example,
+Gfagenome_ind_1seqs.fna.
+Now call runmafftloop.sh, which will align all 50 gene families and
+output to files called "Gfagenome_ind_$a""_aligned.fna" where $a
+denotes 1, 2, .., 50. I changed from using muscle to mafft as the
+ordering of the sequences in the alignment output from muscle was not
+the same as the input (there is an option available but apparently it
+can lead to issues sometimes). No such issues with mafft though. Some
+publications have also showed that mafft does a better job than muscle
+in many cases.
+
+The next thing to do is call is removecarriagereturnsonalignment.sh.
+This will remove the carriage returns in the alignment. Now, run
+pastebyalignmentline.sh. This pastes the alignments line-wise one
+after the other (in a row, so to speak) into a file called
+myco_concatenatedalignment.fna. Now, it is ready for
+MrBayes.
+
+10) Note that the names of each of the taxa will have to be manually
+replaced in place of what there is at the moment. Then, the resulting
+concatenated alignment is copied and pasted into a nexus file for
+mrbayes called myco.na.nex. Run mrBayes:
+mb myco.na.nex > myco.na.log &
+The results were checked (MrBayes output) and the resulting tree with
+branch lengths is in myco.na.nex.con.tre
+
+11) Now, note that some genes have been weeded out. Recall that these
+were written to genesforNR.txt. These genes will be searched against
+the NR database. This is a one way blast as opposed to the reciprocal
+blast earlier. If there is a significant hit at e-value 0.05 to a
+species other than its own with the alignment match length being at
+least 85% of the query sequence, the query is considered to be a gene
+and is included in the matrix genefamilymat as its own row and only
+the species it belonged to having 1 as the column entry. This
+basically ensures that it is a "valid" gene. The search against the NR
+database is done in the scratch folder on two info machines (copy the
+file set after splitting into three parts) using all three machines
+and more or less 120 cores at the same time.
+The following commands are used:
+cp genesforNR.txt /1/scratch/udang/gfam2/
+
+split -l 50 -d -a 3 genesforNR.txt myconohits
+#This splits the file and writes 50 lines of the file into files
+called myconohits[000..89]. Two sets of sequences were then copied to
+different machines (I used info114 and info115) using
+copynumberedfiles.sh
+
+R --vanilla <runblastloop2.R> runblastloop2.out &
+#This by default will run the file with the supplied suffixes, e.g., I
+ran myconohits[000..045] on info114. There is a double loop in the
+file to run only some of the files (4 at the moment) with 10 threads
+each, but still cycles through all of the suffixes specified. Not
+perfect, but works. First, ./forNRgetseqsfromblastdb.sh will be run to
+get sequence files. Then, a blast search is done against the nr
+database using evalue 0.05, parse_deflines, numthreads 10, smith
+waterman, and soft masking options. Slightly different from before,
+here, the stitle is also exported in the tabular formatted results. I
+left out the max target seqs 50 option in blast but it can be added if
+there are concerns about space and time (and no TARDIS is present).
+
+After all the 90 split files were done running, the *blast.out files
+were copied together to the same folder called NRresults and
+concatenated together (order is not important) using cat (cat
+myconohits*blast.out > nohitsvsNR.out) into a file called
+nohitsvsNR.out. Now, to parse through the output, the following
+commands were used:
+
+perl NRfilter85query.pl nohitsvsNR.out
+#This writes only the hits for which the alignment length was greater
+than 85% of the query gene length into a file called NR85filtered.txt
+
+perl NRaddcolumn2.pl NR85filtered.txt
+#This adds a column after the last column which contains general names
+like Mycobacterium ulcerans etc. and writes out to a file called
+NRaddcolfiltered.txt
+
+Now, a R program called genefamilycomplete2.R is run.
+This loads gfcode1.Rdata in its memory and reads NRaddcolfiltered.txt.
+
+First, if a gene being tested in NR hits a MULTISPECIES gene, it is
+automatically valid. Next, if it hits itself, that hit is disregarded.
+However, as this has been run against the NR database, i.e., the
+non-redundant database, there are hits that represent more than one
+gene, e.g., a hit to gene A from Taxa Y might have been consolidated
+with gene B from Taxa Z in the NR database. Using the salltitles field
+in the BLAST output allows to make sure that only hits to itself are
+disregarded. Hence, those genes are written out as "valid" that have
+hits to other taxa (including multispecies WP...) and satisfy the 85%
+criteria. This was also done this way because NCBI introduced the WP
+prefix for certain non-redundant proteins. These WP prefixed proteins
+are autonomous non-redundant protein sequences. These sequences are
+independent of any particular bacterial genome and can be associated
+with more than one isolate, strain, or species.
+
+This will find all "valid" genes from our earlier output and add it to
+the genefamily gene names and genefamily taxa names lists. Then, a
+matrix (call it genefamilymat) of 1s and 0s for each gene family
+(rows) and each taxa (columns) will be constructed. In the minimal
+example in step 7, a row will have 1 as the entry for taxa 1, 2, and 5
+with 0's everywhere else. This is written to a file called
+geneconR.txt and the R image is saved as gfcode2.Rdata.
+
+Now, in folder indelanalysis, geneconR.txt and myco.na.nex.con.tre are
+used with the indelmiss package to get estimates. If the standard
+errors involve NAs in the results, this is because of the numerical
+approximation program. In this case, bootstrap using numhessian=FALSE
+and 1000 bootstrap samples to get standard errors.
