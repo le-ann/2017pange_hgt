@@ -1,0 +1,90 @@
+\documentclass[12pt]{article}
+
+\usepackage{scrtime} % for \thistime (this package MUST be listed first!)
+\usepackage{fancyhdr}
+\usepackage{xspace} %for having the perfect spacing after new commands
+\usepackage{xcolor,colortbl}%for changing cell colour in tables
+\usepackage{booktabs} %for tables
+\usepackage{graphicx}
+\usepackage{listings}
+%\usepackage{Sweave}
+%%%%formating the page%%%%
+\pagestyle{fancy}
+
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue,filecolor=magenta,urlcolor=cyan,}
+\urlstyle{same}
+
+
+\setlength{\headheight}{15.2pt}
+\setlength{\headsep}{13 pt}
+\setlength{\parindent}{28 pt}
+\setlength{\parskip}{12 pt}
+\pagestyle{fancyplain}
+\usepackage[T1]{fontenc}
+\rhead{\fancyplain{}{Genetic Distance and Pangenome Size Correlation $|$  \today \hfill Ann Le}} %insert your name here and your document title. the \today will just put the date that you compiled the documnet there.
+\renewcommand\headrulewidth{0.5mm}
+%%%%%%%%%%%%%%%%%%%%%%
+%you can make new commands so you dont have to keep typing out (for example) the same bacteria name
+%to use it in your text you just type \tub 
+\newcommand{\salm}{\textit{Salmonella}\xspace}
+\newcommand{\saur}{\textit{S.\,aureus}\xspace}
+\newcommand{\bas}{\textit{Bacillus subtilis}\xspace}
+\newcommand{\strep}{\textit{Streptomyces}\xspace}
+\newcommand{\ecol}{\textit{E.\,coli}\xspace}
+\providecommand{\e}[1]{\ensuremath{\times 10^{#1}}}
+%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+
+{\large \textbf{\salm (with plasmids)}\\}
+\includegraphics[width=\textwidth]{salmwithplasmidplots.pdf}
+
+\begin{lstlisting}
+Residuals:
+    Min      1Q  Median      3Q     Max 
+    -867.44 -248.82   34.71  208.10 1180.96 
+
+Coefficients:
+           Estimate Std. Error t value Pr(>|t|)    
+Intercept)   6083.9      190.8  31.887  < 2e-16 ***
+distance     1252.6      154.9   8.088 1.65e-12 ***
+---
+Signif. codes:  0  ***  0.001  **  0.01  *  0.05 . 0.1   1
+
+Residual standard error: 369.3 on 98 degrees of freedom
+Multiple R-squared:  0.4003,    Adjusted R-squared:  0.3942 
+F-statistic: 65.41 on 1 and 98 DF,  p-value: 1.65e-12
+\end{lstlisting}
+
+\newpage
+
+{\large \textbf{\salm (without plasmids)}\\}
+\includegraphics[width=\textwidth]{salmwoplasmidplots.pdf}
+
+\begin{lstlisting}
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-890.36 -247.15  -16.13  232.67  733.39 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)   6690.0      192.3  34.789  < 2e-16 ***
+distance       707.3      147.1   4.808 5.51e-06 ***
+---
+Signif. codes:  0 *** 0.001 ** 0.01 * 0.05 . 0.1   1
+
+Residual standard error: 323.1 on 98 degrees of freedom
+Multiple R-squared:  0.1909,    Adjusted R-squared:  0.1826 
+F-statistic: 23.12 on 1 and 98 DF,  p-value: 5.507e-06
+
+\end{lstlisting}
+
+
+\newpage 
+
+{\large \textbf{\salm (without plasmids)}\\}
+\includegraphics[width=\textwidth]{salmwoplasmidplot.pdf}
+
+\end{document}
