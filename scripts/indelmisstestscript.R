@@ -7,12 +7,34 @@ args = commandArgs(trailingOnly=TRUE)
 
 #args[1] = tree
 #args[2] = presence-absence matrix
+#args[3] = run list 
 
 library(indelmiss)
 library(ape)
 
-tree <- read.tree(args[1])
+ogtree <- read.tree(args[1])
 data <- read.csv(args[2]) # read csv regularly with header
+run_list <- read.table(args[3], sep="\n")
+
+#-----------------Tree Trimmer-----------------------------------#
+
+tiplabs <- ogtree$tip.label
+tiplab_remove <- substr(tiplabs,2,nchar(tiplabs)-1) # removes quotations
+
+to_keep <- match(as.character(run_list[,1]), tiplab_remove) # matches where object is in run_list 
+
+drop <- tiplabs[-(to_keep)] # finds the complement of the given indices
+
+outtree <- drop.tip(tree, drop) # drops everything within the "drop" vector 
+
+plot(outtree, no.margin = TRUE)
+edgelabels(round(tree$edge.length,4), adj = c(0.5,-0.5), bg = "white", frame = "none", font = 0.5)
+
+write.tree(newtree, "outputforindelmiss.tree")
+
+tree <- read.tree("outputforindelmiss.tree")
+#----------------------------------------------------------------#
+
 
 #set.seed(123) # set a seed
 datab <- as.matrix(data) # convert to matrix
