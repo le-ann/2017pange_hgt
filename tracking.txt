@@ -24,53 +24,62 @@ Five random Salmonella species:
   * presenceAbsence output files (presenceabsence.Rdata & presenceabsence.csv)
 
 Salmonella:
-  PLASMID
-  
+  PLASMID 
   NO PLASMID:
-   
+  * getTaxaNamesandprots.bash - COMPLETE - MISSING 1 (97/98)
+  * genefamily11.pl - COMPLETE (note: NRgenes.faa is not produced, use matchingprotid.py when
+    required)
+  * createPresenceAbsencematrix - IN PROGRESS
+
 S. aureus:
   PLASMID
-  
-  NO PLASMID:
+  NO PLASMID
+  * getTaxaNamesandprots.bash - INCOMPLETE - MISSING 5 (86/91)
+  * genefamily11.pl - IN PROGRESS
   
 E. coli:
   PLASMID
-  
-  NO PLASMID:
+  NO PLASMID
+  * getTaxaNameandprots.bash - IN PROGRESS
   
 S. pyogenes:
   PLASMID
-  
-  NO PLASMID:
+  NO PLASMID
+  * getTaxaNamesandprots.bash - COMPLETED (41)
+  * genefamily11.pl - COMPLETED
+  * createPresenceAbsencemtrix -  
 
 Y. pestis:
   PLASMID
-  
-  NO PLASMID:
+  NO PLASMID
+  * getTaxaNamesandprots.bash - COMPLETED (30)
+  * 
   
 H. pylori:
   PLASMID
-  
   NO PLASMID:
+  * getTaxaNamesandprots.bash - INCOMPLETE - MISSING 8 (71/79)
   
 C. jejuni:
   PLASMID
-  
   NO PLASMID:
+  * get TaxaNamesandprots.bash - IN PROGRESS 
   
 K. pneumoniae:
   PLASMID
-  
   NO PLASMID:
+  * get TaxaNamesandprots.bash - COMPLETE - MISSING 1 (84/85)
+  * genefamily11.pl - COMPLETE
+  * createPresenceAbsencemtrix - IN PROGRESS
   
 L. monocytogenes:
   PLASMID
-  
   NO PLASMID:
-  
+  * get TaxaNamesandprots.bash - IN PROGRESS
+
 M. tuberculosis:
-  PLASMID
-  
+  PLASMID 
   NO PLASMID:
-  
+  * get TaxaNamesandprots.bash - COMPLETED - MISSING 8 (44/52)
+  * genefamily11.pl - IN PROGRESS
 
