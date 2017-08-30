@@ -6,11 +6,11 @@
 # $3 is the concatenated faa file with all of the protiein seqs
 
 grep -v '^#' $2 > blast.tmp
-perl ~/summer2017/scripts/sidgenefamily11SplitSingletons.pl $1 blast.tmp 
+perl ~/github/2017pange_hgt/scripts/sidgenefamily11SplitSingletons.pl $1 blast.tmp 
 \rm blast.tmp
 
 mv genesForNR.txt nr.tmp
 cut -d':' -f2 nr.tmp > genesForNR.txt
 rm nr.tmp
 
-~/summer2017/scripts/matchingprotid.py $3 genesForNR.txt > NRgenes.faa &
+~/github/2017pange_hgt/scripts/matchingprotid.py $3 genesForNR.txt > NRgenes.faa &
