@@ -27,7 +27,7 @@
 %%%%%%%%%%%%%%%%%%%%%%
 %you can make new commands so you dont have to keep typing out (for example) the same bacteria name
 %to use it in your text you just type \tub 
-\newcommand{\salm}{\textit{Salmonella}\xspace
+\newcommand{\salm}{\textit{Salmonella}\xspace}
 \newcommand{\saur}{\textit{S.\,aureus}\xspace}
 \newcommand{\bas}{\textit{Bacillus subtilis}\xspace}
 \newcommand{\strep}{\textit{Streptomyces}\xspace}
@@ -39,7 +39,7 @@
 
 \bigskip	
 	
-\section*{Two Weeks Ago}
+\section*{Last Week}
 
 \begin{itemize} 
 
@@ -55,10 +55,113 @@ documentation and trying to figure out how to work it.
 
 This is the results that were shown:
 
+\begin{lstlisting}
 
+Call:
+indelrates(usertree = tree, userphyl = userphyl)
+
+ 5 taxa with 4818 gene families and 32 different phyletic gene pat
+-----------------------------------
+Groups of nodes with the same rates:
+[[1]] 
+[1] 1 2 3 4 5 6 7 8 9
+
+-----------------------------------
+M1
+$rates
+        [,1]
+mu 0.8269211
+nu 0.8269211
+
+$se
+$se$rates
+         [,1]
+mu 0.02280058
+nu 0.02280058
+
+
+
+Loglikelihood for model M1 : -15138
+AIC           for model M1 : -30278
+BIC           for model M1 : -30277.61
+-----------------------------------
+M2
+$rates
+        [,1]
+mu 0.6838036
+nu 0.6838036
+
+$p
+[1] 0.1164538
+
+$se
+$se$rates
+         [,1]
+mu 0.01819685
+nu 0.01819685
+
+$se$p
+[1] 0.005380595
+
+
+Number of genes estimated as missing corresponding to the missing
+ [1] 419 
+
+Loglikelihood for model M2 : -13700.91
+AIC           for model M2 : -27405.82
+BIC           for model M2 : -27405.04
+-----------------------------------
+M3
+$rates
+        [,1]
+mu 0.8277939
+nu 0.8337843
+
+$se
+$se$rates
+         [,1]
+mu 0.02429750
+nu 0.06850801
+
+
+
+Loglikelihood for model M3 : -15137.99
+AIC           for model M3 : -30279.99
+BIC           for model M3 : -30279.21
+-----------------------------------
+M4
+$rates
+        [,1]
+mu 0.6716713
+nu 0.5186157
+
+$p
+[1] 0.1164697
+
+$se
+$se$rates
+         [,1]
+mu 0.01766361
+nu 0.05162335
+
+$se$p
+[1] 0.005380365
+
+
+Number of genes estimated as missing corresponding to the missing
+ [1] 419
+
+Loglikelihood for model M4 : -13695.94
+AIC           for model M4 : -27397.88
+BIC           for model M4 : -27396.71
+-----------------------------------
+Time taken: 1.977 seconds.
+
+
+\end{lstlisting}
 
 \section*{Next Week}
-Plan the final R data frames output:
+Tentative steps to plan the final R data frames output:
 
 %\begin{itemize}
 
@@ -72,9 +175,29 @@ run2
 .
 run100
 
+What we want to end up with: a presence-absence matrix with only
+the 20 species and their respective gene families.
+
 \begin{enumerate}
 
-\item Reference roaryinput lists: 100 group runs of 20 species each 
+\item Consult roaryinput lists: 100 group runs of 20 species each.
+Each run group contains 20 individuals which we want to obtain thelateral gene transfer rates from indelmiss.
+
+\item Use the reference files to extract the proper faa files  
+
+\begin{lstlisting}
+for x in run*; do vim -c ":%s/modded_GCF/GCA/g" -c ":%s/fna/faa/g" -c ":wq" $x; done
+
+for x in {1..100}; do cat `cat /home/ann/bacteria_assembly/s_aureus/gbk/ncbi-genomes-2017-07-14/no_plasmid/getfeatures/roaryinput/run$x` > concatenated_runs/concatrun$x.faa; done
+
+\end{lstlisting}
+
+
+\item Run on genefamily11.pl (use TaxaNamesandprots.bash to generate directory of prot files, and then run the perl code, finally, this output should be able to be run on indelmiss)
+
+
+
+\item After the results are obtained, I will have to write a code to read them all into R data frames
 
 \end{enumerate}
 
