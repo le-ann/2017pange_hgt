@@ -27,59 +27,79 @@ Salmonella:
   PLASMID 
   NO PLASMID:
   * getTaxaNamesandprots.bash - COMPLETE - MISSING 1 (97/98)
-  * genefamily11.pl - COMPLETE (note: NRgenes.faa is not produced, use matchingprotid.py when
+  * genefamily11.pl - COMPLETE (note: NRgenes.faa was not produced, could indicate and 
+    incompletion. If not,  use matchingprotid.py when
     required)
   * createPresenceAbsencematrix - IN PROGRESS
+  
 
 S. aureus:
   PLASMID
   NO PLASMID
   * getTaxaNamesandprots.bash - INCOMPLETE - MISSING 5 (86/91)
   * genefamily11.pl - IN PROGRESS
+
   
 E. coli:
   PLASMID
   NO PLASMID
-  * getTaxaNameandprots.bash - IN PROGRESS
+  * getTaxaNameandprots.bash - COMPLETE 
+  * genefamily11.pl - COMPLETE
+  * createPresenceAbsencemtrix - 
   
 S. pyogenes:
   PLASMID
   NO PLASMID
   * getTaxaNamesandprots.bash - COMPLETED (41)
   * genefamily11.pl - COMPLETED
-  * createPresenceAbsencemtrix -  
+  * createPresenceAbsencemtrix - IN PROGRESS
 
 Y. pestis:
   PLASMID
   NO PLASMID
   * getTaxaNamesandprots.bash - COMPLETED (30)
-  * 
+  * genefamily11.pl - COMPLETED
+  * createPresenceAbsencemtrix - 
   
 H. pylori:
   PLASMID
   NO PLASMID:
   * getTaxaNamesandprots.bash - INCOMPLETE - MISSING 8 (71/79)
+  * genefamily11.pl - COMPLETED
+  * createPresenceAbsencemtrix - 
   
 C. jejuni:
   PLASMID
   NO PLASMID:
-  * get TaxaNamesandprots.bash - IN PROGRESS 
+  * get TaxaNamesandprots.bash - COMPLETE - MISSING 1 (66/67)
+  * genefamily11.pl - COMPLETED
+  * createPresenceAbsencemtrix -   
   
 K. pneumoniae:
   PLASMID
   NO PLASMID:
   * get TaxaNamesandprots.bash - COMPLETE - MISSING 1 (84/85)
   * genefamily11.pl - COMPLETE
-  * createPresenceAbsencemtrix - IN PROGRESS
+  * createPresenceAbsencemtrix - IN PROGRESS/ERROR
   
 L. monocytogenes:
   PLASMID
   NO PLASMID:
-  * get TaxaNamesandprots.bash - IN PROGRESS
+  * get TaxaNamesandprots.bash - COMPLETE
+  * genefamily11.pl - IN PROGRESS
+  * createPresenceAbsencemtrix - 
 
 M. tuberculosis:
   PLASMID 
   NO PLASMID:
   * get TaxaNamesandprots.bash - COMPLETED - MISSING 8 (44/52)
-  * genefamily11.pl - IN PROGRESS
+  * genefamily11.pl - COMPLETED
+  * createPresenceAbsencemtrix - 
+
+Recurring Error on presenceAbsencematrx code -> Error: 
+unexpected symbol in "write.table(presenceAbsence, file = c(str(args[3]), "PAmatrix.txt"), 
+row.names = TRUE col.names"
+Execution halted.
+
+
 

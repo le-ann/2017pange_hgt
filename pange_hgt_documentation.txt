@@ -306,4 +306,18 @@ The data outputs in four different models (M1, M2, M3, M4) that can be used and 
 as necessary.
 
 
+TO BE DELETED/ORGANIZED (PLANNING STEPS):
+**Steps used to create 20 Species PresenceAbsence matrices***
 
+1) Generate the full PresenceAbsence matrix for ALL the organisms within a given species.
+You will extract the 20 species needed later.
+
+2) Use the 'extract_accession_from_gbk.bash' code to generate accession numbers for each
+run list from the input files. These will be used for the extraction.
+
+Tentative plan to use in R to get smaller matrix:
+i) Read in text file and presenceAbsencemtrix
+ii) Look at function "match". Inputted properly, it will give you the row number of the 
+big matrix that corresponds to each accession number, and with that you can just subset
+from the big matrix
+(%in% also works)
