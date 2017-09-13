@@ -45,7 +45,7 @@ E. coli:
   NO PLASMID
   * getTaxaNameandprots.bash - COMPLETE 
   * genefamily11.pl - COMPLETE
-  * createPresenceAbsencemtrix - 
+  * createPresenceAbsencemtrix - IN PROGRESS 
   
 S. pyogenes:
   PLASMID
@@ -59,42 +59,42 @@ Y. pestis:
   NO PLASMID
   * getTaxaNamesandprots.bash - COMPLETED (30)
   * genefamily11.pl - COMPLETED
-  * createPresenceAbsencemtrix - 
+  * createPresenceAbsencemtrix - IN PROGRESS
   
 H. pylori:
   PLASMID
   NO PLASMID:
   * getTaxaNamesandprots.bash - INCOMPLETE - MISSING 8 (71/79)
   * genefamily11.pl - COMPLETED
-  * createPresenceAbsencemtrix - 
+  * createPresenceAbsencemtrix - IN PROGRESS
   
 C. jejuni:
   PLASMID
   NO PLASMID:
   * get TaxaNamesandprots.bash - COMPLETE - MISSING 1 (66/67)
   * genefamily11.pl - COMPLETED
-  * createPresenceAbsencemtrix -   
+  * createPresenceAbsencemtrix - IN PROGRESS
   
 K. pneumoniae:
   PLASMID
   NO PLASMID:
   * get TaxaNamesandprots.bash - COMPLETE - MISSING 1 (84/85)
   * genefamily11.pl - COMPLETE
-  * createPresenceAbsencemtrix - IN PROGRESS/ERROR
+  * createPresenceAbsencemtrix - IN PROGRESS
   
 L. monocytogenes:
   PLASMID
   NO PLASMID:
   * get TaxaNamesandprots.bash - COMPLETE
   * genefamily11.pl - IN PROGRESS
-  * createPresenceAbsencemtrix - 
+  * createPresenceAbsencemtrix - IN PROGRESS
 
 M. tuberculosis:
   PLASMID 
   NO PLASMID:
   * get TaxaNamesandprots.bash - COMPLETED - MISSING 8 (44/52)
   * genefamily11.pl - COMPLETED
-  * createPresenceAbsencemtrix - 
+  * createPresenceAbsencemtrix - IN PROGRESS
 
 Recurring Error on presenceAbsencematrx code -> Error: 
 unexpected symbol in "write.table(presenceAbsence, file = c(str(args[3]), "PAmatrix.txt"), 
