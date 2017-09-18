@@ -15,8 +15,8 @@ psAmatrix <- as.matrix(read.csv(args[2]))
 # listofacc <- read.table("testlist.txt")
 # psAmatrix <- as.matrix(read.csv("perlmatrixoutput.csv"))
 
-toExtract <- match(as.character(listofacc[,1]), psAmatrix)
+toExtract <- match(as.vector(listofacc[,1]), psAmatrix)
 
 smallpsAMatrix <- psAmatrix[c(toExtract),]
 
-write.csv2(smallpsAMatrix,"smallmatrixout.csv")
+write.csv(smallpsAMatrix,"smallmatrixout.csv")
