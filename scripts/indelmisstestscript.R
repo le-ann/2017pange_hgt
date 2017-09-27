@@ -12,7 +12,7 @@ args = commandArgs(trailingOnly=TRUE)
 library(indelmiss)
 library(ape)
 
-ogtree <- read.tree(args[1])
+ogtree <- read.tree(args[1]) # reads in original unclipped tree
 data <- read.csv(args[2]) # read csv regularly with header
 run_list <- read.table(args[3], sep="\n")
 
@@ -25,12 +25,12 @@ to_keep <- match(as.character(run_list[,1]), tiplab_remove) # matches where obje
 
 drop <- tiplabs[-(to_keep)] # finds the complement of the given indices
 
-outtree <- drop.tip(tree, drop) # drops everything within the "drop" vector 
+outtree <- drop.tip(ogtree, drop) # drops everything within the "drop" vector 
 
 plot(outtree, no.margin = TRUE)
-edgelabels(round(tree$edge.length,4), adj = c(0.5,-0.5), bg = "white", frame = "none", font = 0.5)
+edgelabels(round(outtree$edge.length,4), adj = c(0.5,-0.5), bg = "white", frame = "none", font = 0.5)
 
-write.tree(newtree, "outputforindelmiss.tree")
+write.tree(outtree, "outputforindelmiss.tree")
 
 tree <- read.tree("outputforindelmiss.tree")
 #----------------------------------------------------------------#
