@@ -8,13 +8,15 @@ args = commandArgs(trailingOnly=TRUE)
 #args[1] = tree
 #args[2] = presence-absence matrix
 #args[3] = run list 
+#args[4] = accession numbers list 
 
 library(indelmiss)
 library(ape)
 
-ogtree <- read.tree(args[1]) # reads in original unclipped tree
-data <- read.csv(args[2]) # read csv regularly with header
-run_list <- read.table(args[3], sep="\n")
+ogtree <- read.tree(args[1]) # reads in original unclipped tree, names listed as "GCF...etc.", with roary run list
+data <- read.csv(args[2]) # reads in matrix of twenty species, labelled by accession 
+run_list <- read.table(args[3], sep="\n") # roary run list "GCF...fna" format
+# acc_list <- read.table(args[4], sep="\n") # accession numbers
 
 #-----------------Tree Trimmer-----------------------------------#
 
@@ -37,8 +39,15 @@ tree <- read.tree("outputforindelmiss.tree")
 
 
 #set.seed(123) # set a seed
-datab <- as.matrix(data) # convert to matrix
-userphyl <- t(datab) # transpose the matrix
+#datab <-  # convert to matrix
+#userphyl <- t(datab) # transpose the matrix
+
+# Converting data into userphyl format, which is JUST a matrix of 0s and 1s
+nums <- sapply(data, is.numeric) # Denotes which are numeric elements in the original matrix
+numonlydata <- data[,nums] # Subsets elements that are TRUE only
+userphyl <- t(numonlydata) # Transpose to fit with indelrates format
+
+
 
 # Run indelrates
 indel_user <- indelrates(usertree = tree, userphyl = userphyl)
