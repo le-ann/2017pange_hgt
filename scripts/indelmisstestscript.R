@@ -10,6 +10,16 @@ args = commandArgs(trailingOnly=TRUE)
 #args[3] = run list 
 #args[4] = accession numbers list 
 
+#--------------Customized Laptop Files-----------------------
+# Comment out for for loop use 
+setwd("~/thesis/2017pange_hgt/indelmiss")
+
+ogtree <- read.tree("spyogenes_rooted.tree")
+data <- read.csv("noquotesspyognesout.csv")
+run_list <- read.table("run1", sep = "\n")
+acces_list <- read.table("accessioninput1", sep = "\n")
+#------------------------------------------------------------
+
 library(indelmiss)
 library(ape)
 
@@ -17,6 +27,8 @@ ogtree <- read.tree(args[1]) # reads in original unclipped tree, names listed as
 data <- read.csv(args[2]) # reads in matrix of twenty species, labelled by accession 
 run_list <- read.table(args[3], sep="\n") # roary run list "GCF...fna" format
 # acc_list <- read.table(args[4], sep="\n") # accession numbers
+
+
 
 #-----------------Tree Trimmer-----------------------------------#
 
@@ -35,8 +47,18 @@ edgelabels(round(outtree$edge.length,4), adj = c(0.5,-0.5), bg = "white", frame 
 write.tree(outtree, "outputforindelmiss.tree")
 
 tree <- read.tree("outputforindelmiss.tree")
-#----------------------------------------------------------------#
 
+#--------------------------------------------------------------------------------#
+# plot(tree)
+# Reorder data matrix into correct matrix from bottom to top of tree
+data[,1] <- run_list[,1]
+tree$tip.label <- substr(tree$tip.label,2,nchar(tree$tip.label)-1) # remove quotes
+
+library(dbplyr)
+data <- data %>%
+  slice(match(c(tree$tip.label),X)) # rearranges the factors into order matching tree
+
+#------------------------------------------------------------------------------#
 
 #set.seed(123) # set a seed
 #datab <-  # convert to matrix
@@ -47,10 +69,14 @@ nums <- sapply(data, is.numeric) # Denotes which are numeric elements in the ori
 numonlydata <- data[,nums] # Subsets elements that are TRUE only
 userphyl <- t(numonlydata) # Transpose to fit with indelrates format
 
-
-
 # Run indelrates
+set.seed(123)
 indel_user <- indelrates(usertree = tree, userphyl = userphyl)
+
+
+#-------------------------------------------------------------------
+
+
 
 # Documentation notes:
 # M1 - estimates indel rates where both insertion and deletion rates are the same
