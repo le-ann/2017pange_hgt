@@ -15,4 +15,15 @@ for y in {1..100}
 				grep -oP '(?<=ACCESSION)\s{3}[A-Z]{2}\d{6}' $x >> inputfiles/accessioninput$y
 			done
 	done 
-	 
+
+
+# Removal of space limiter
+if [ `ls ./inputfiles/* | wc -l` == 100 ]
+then 
+	for x in ./inputfiles/accessioninput{1..100}
+	do
+		vim -c ":%s/\s\{3}//g" -c ":wq" $x
+	done
+fi 
+
+			 

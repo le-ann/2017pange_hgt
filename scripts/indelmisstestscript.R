@@ -12,12 +12,12 @@ args = commandArgs(trailingOnly=TRUE)
 
 #--------------Customized Laptop Files-----------------------
 # Comment out for for loop use 
-setwd("~/thesis/2017pange_hgt/indelmiss")
-
-ogtree <- read.tree("spyogenes_rooted.tree")
-data <- read.csv("noquotesspyognesout.csv")
-run_list <- read.table("run1", sep = "\n")
-acces_list <- read.table("accessioninput1", sep = "\n")
+# setwd("~/thesis/2017pange_hgt/indelmiss")
+# 
+# ogtree <- read.tree("spyogenes_rooted.tree")
+# data <- read.csv("noquotesspyognesout.csv")
+# run_list <- read.table("run1", sep = "\n")
+# acces_list <- read.table("accessioninput1", sep = "\n")
 #------------------------------------------------------------
 
 library(indelmiss)
@@ -26,7 +26,7 @@ library(ape)
 ogtree <- read.tree(args[1]) # reads in original unclipped tree, names listed as "GCF...etc.", with roary run list
 data <- read.csv(args[2]) # reads in matrix of twenty species, labelled by accession 
 run_list <- read.table(args[3], sep="\n") # roary run list "GCF...fna" format
-# acc_list <- read.table(args[4], sep="\n") # accession numbers
+acc_list <- read.table(args[4], sep="\n") # accession numbers
 
 
 
@@ -51,12 +51,12 @@ tree <- read.tree("outputforindelmiss.tree")
 #--------------------------------------------------------------------------------#
 # plot(tree)
 # Reorder data matrix into correct matrix from bottom to top of tree
+data$X.1 <- NULL
 data[,1] <- run_list[,1]
 tree$tip.label <- substr(tree$tip.label,2,nchar(tree$tip.label)-1) # remove quotes
 
-library(dbplyr)
-data <- data %>%
-  slice(match(c(tree$tip.label),X)) # rearranges the factors into order matching tree
+library(dplyr)
+data <- data %>% slice(match(c(tree$tip.label),X)) # rearranges the factors into order matching tree
 
 #------------------------------------------------------------------------------#
 
@@ -73,6 +73,7 @@ userphyl <- t(numonlydata) # Transpose to fit with indelrates format
 set.seed(123)
 indel_user <- indelrates(usertree = tree, userphyl = userphyl)
 
+print(indel_user)
 
 #-------------------------------------------------------------------
 
