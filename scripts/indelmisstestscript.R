@@ -2,6 +2,10 @@
 #---------------------------------------
 # Reference file on how to run indelmiss
 #---------------------------------------
+rm(list=ls())
+
+library(indelmiss)
+library(ape)
 
 args = commandArgs(trailingOnly=TRUE)
 
@@ -18,10 +22,13 @@ ogtree <- read.tree("spyogenes_rooted.tree")
 data <- read.csv("noquotesspyognesout.csv")
 run_list <- read.table("run1", sep = "\n")
 acces_list <- read.table("accessioninput1", sep = "\n")
-#------------------------------------------------------------
 
-library(indelmiss)
-library(ape)
+ogtree <- read.tree("../trees/rooted_pestis.tree")
+data <- read.csv("ypestismatrix1.csv")
+run_list <- read.table("ypestisrun1", sep = "\n")
+acces_list <- read.table("accessioninput1", sep = "\n")
+
+#------------------------------------------------------------
 
 ogtree <- read.tree(args[1]) # reads in original unclipped tree, names listed as "GCF...etc.", with roary run list
 data <- read.csv(args[2]) # reads in matrix of twenty species, labelled by accession 
@@ -51,12 +58,14 @@ tree <- read.tree("outputforindelmiss.tree")
 #--------------------------------------------------------------------------------#
 # plot(tree)
 # Reorder data matrix into correct matrix from bottom to top of tree
+data$X.1 <- NULL #include only if there exists an extra column of numbers at the beginning (to be modified)
 data[,1] <- run_list[,1]
 tree$tip.label <- substr(tree$tip.label,2,nchar(tree$tip.label)-1) # remove quotes
 
-library(dbplyr)
-data <- data %>%
-  slice(match(c(tree$tip.label),X)) # rearranges the factors into order matching tree
+library(dplyr)
+#ogdata <- data
+data <- data %>% slice(match(c(tree$tip.label),X)) # rearranges the factors into order matching tree
+
 
 #------------------------------------------------------------------------------#
 
@@ -185,3 +194,106 @@ indel_user <- indelrates(usertree = tree, userphyl = userphyl)
 # BIC           for model M4 : -27396.71 
 # -----------------------------------
 # Time taken: 1.977 seconds.
+
+#S.pyogenes Sample Run
+#
+#Call:
+#  indelrates(usertree = tree, userphyl = userphyl)
+#
+#20 taxa with 2673 gene families and 949 different phyletic gene patterns.
+#-----------------------------------
+#  Groups of nodes with the same rates:
+#  [[1]]
+#[1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25
+#[26] 26 27 28 29 30 31 32 33 34 35 36 37 38 39
+#
+#-----------------------------------
+#  M1 
+#$rates
+#[,1]
+#mu 1.369977
+#nu 1.369977
+#
+#$se
+#$se$rates
+#[,1]
+#mu 0.02252019
+#nu 0.02252019
+#
+#
+#
+#Loglikelihood for model M1 : -28808.75 
+#AIC           for model M1 : -57619.5 
+#BIC           for model M1 : -57625.63 
+#-----------------------------------
+#  M2 
+#$rates
+#[,1]
+#mu 1.332947
+#nu 1.332947
+#
+#$p
+#[1] 0.07563533
+#
+#$se
+#$se$rates
+#[,1]
+#mu 0.02206596
+#nu 0.02206596
+#
+#$se$p
+#[1] 0.006699188
+#
+#
+#Number of genes estimated as missing corresponding to the missing data proportions is:
+#  [1] 123
+#
+#Loglikelihood for model M2 : -28499.02 
+#AIC           for model M2 : -57002.03 
+#BIC           for model M2 : -57014.28 
+#-----------------------------------
+#  M3 
+#$rates
+#[,1]
+#mu 1.262131
+#nu 1.607776
+#
+#$se
+#$se$rates
+#[,1]
+#mu 0.02423150
+#nu 0.03602354
+#
+#
+#
+#Loglikelihood for model M3 : -28766.18 
+#AIC           for model M3 : -57536.36 
+#BIC           for model M3 : -57548.61 
+#-----------------------------------
+#  M4 
+#$rates
+#[,1]
+#mu 1.223477
+#nu 1.577018
+#
+#$p
+#[1] 0.07570527
+#
+#$se
+#$se$rates
+#[,1]
+#mu 0.02366771
+#nu 0.03556520
+#
+#$se$p
+#[1] 0.006699509
+#
+#
+#Number of genes estimated as missing corresponding to the missing data proportions is:
+#  [1] 123
+#
+#Loglikelihood for model M4 : -28453.11 
+#AIC           for model M4 : -56912.22 
+#BIC           for model M4 : -56930.59 
+#-----------------------------------
+#  Time taken: 16.143 seconds.
