@@ -4,6 +4,7 @@
 # list. 
 # args[1] - read in list of accession numbers
 # args[2] - read in presence absence matrix
+# args[3] - desired_name.csv
 
 rm(list=ls())
 args = commandArgs(trailingOnly=TRUE) # use to read arguments later
@@ -19,4 +20,6 @@ toExtract <- match(as.vector(listofacc[,1]), psAmatrix)
 
 smallpsAMatrix <- psAmatrix[c(toExtract),]
 
-write.csv(smallpsAMatrix,"smallmatrixout.csv")
+# print(smallpsAMatrix)
+
+ write.csv(smallpsAMatrix, as.character(args[3]), quote = FALSE) 

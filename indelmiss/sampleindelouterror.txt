@@ -1,0 +1,101 @@
+Something is not right with the standard errors.Check Hessian matrix estimate.
+Call:
+indelrates(usertree = tree, userphyl = userphyl)
+
+ 20 taxa with 2471 gene families and 653 different phyletic gene patterns.
+-----------------------------------
+Groups of nodes with the same rates:
+[[1]]
+ [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25
+[26] 26 27 28 29 30 31 32 33 34 35 36 37 38 39
+
+-----------------------------------
+M1 
+$rates
+   [,1]
+mu  0.9
+nu  0.9
+
+$se
+$se$rates
+   [,1]
+mu  NaN
+nu  NaN
+
+
+
+Loglikelihood for model M1 : -Inf 
+AIC           for model M1 : -Inf 
+BIC           for model M1 : -Inf 
+-----------------------------------
+M2 
+$rates
+   [,1]
+mu  0.9
+nu  0.9
+
+$p
+[1] 0.04603271
+
+$se
+$se$rates
+   [,1]
+mu  NaN
+nu  NaN
+
+$se$p
+[1] NaN
+
+
+Number of genes estimated as missing corresponding to the missing data proportions is:
+ [1] 76
+
+Loglikelihood for model M2 : -Inf 
+AIC           for model M2 : -Inf 
+BIC           for model M2 : -Inf 
+-----------------------------------
+M3 
+$rates
+   [,1]
+mu  0.9
+nu  0.9
+
+$se
+$se$rates
+   [,1]
+mu  NaN
+nu  NaN
+
+
+
+Loglikelihood for model M3 : -Inf 
+AIC           for model M3 : -Inf 
+BIC           for model M3 : -Inf 
+-----------------------------------
+M4 
+$rates
+   [,1]
+mu  0.9
+nu  0.9
+
+$p
+[1] 0.04603271
+
+$se
+$se$rates
+   [,1]
+mu  NaN
+nu  NaN
+
+$se$p
+[1] NaN
+
+
+Number of genes estimated as missing corresponding to the missing data proportions is:
+ [1] 76
+
+Loglikelihood for model M4 : -Inf 
+AIC           for model M4 : -Inf 
+BIC           for model M4 : -Inf 
+-----------------------------------
+Time taken: 8.796 seconds.
