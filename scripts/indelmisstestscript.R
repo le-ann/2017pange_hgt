@@ -19,11 +19,11 @@ args = commandArgs(trailingOnly=TRUE)
 
 setwd("~/thesis/2017pange_hgt/indelmiss")
 # 
-# ogtree <- read.tree("spyogenes_rooted.tree")
-# data <- read.csv("noquotesspyognesout.csv")
-# run_list <- read.table("run1", sep = "\n")
-# acces_list <- read.table("accessioninput1", sep = "\n")
-#------------------------------------------------------------
+ogtree <- read.tree("spyogenes_rooted.tree")
+data <- read.csv("noquotesspyognesout.csv")
+run_list <- read.table("run1", sep = "\n")
+acces_list <- read.table("accessioninput1", sep = "\n")
+#-----------------------------------------------------------
 
 
 ogtree <- read.tree("../trees/rooted_pestis.tree")
@@ -84,7 +84,11 @@ userphyl <- t(numonlydata) # Transpose to fit with indelrates format
 set.seed(123)
 indel_user <- indelrates(usertree = tree, userphyl = userphyl)
 
-print(indel_user)
+#print(indel_user)
+print(indel_user$results$M1$parsep$rates)
+print(indel_user$results$M2$parsep$rates)
+print(indel_user$results$M3$parsep$rates)
+print(indel_user$results$M4$parsep$rates)
 
 #-------------------------------------------------------------------
 
