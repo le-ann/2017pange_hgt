@@ -17,19 +17,19 @@ args = commandArgs(trailingOnly=TRUE)
 #--------------Customized Laptop Files-----------------------
 # Comment out for for loop use 
 
-setwd("~/thesis/2017pange_hgt/indelmiss")
+#setwd("~/thesis/2017pange_hgt/indelmiss")
 # 
-ogtree <- read.tree("spyogenes_rooted.tree")
-data <- read.csv("noquotesspyognesout.csv")
-run_list <- read.table("run1", sep = "\n")
-acces_list <- read.table("accessioninput1", sep = "\n")
+#ogtree <- read.tree("spyogenes_rooted.tree")
+#data <- read.csv("noquotesspyognesout.csv")
+#run_list <- read.table("run1", sep = "\n")
+#acces_list <- read.table("accessioninput1", sep = "\n")
 #-----------------------------------------------------------
 
 
-ogtree <- read.tree("../trees/rooted_pestis.tree")
-data <- read.csv("ypestismatrix1.csv")
-run_list <- read.table("ypestisrun1", sep = "\n")
-acces_list <- read.table("accessioninput1", sep = "\n")
+#ogtree <- read.tree("../trees/rooted_pestis.tree")
+#data <- read.csv("ypestismatrix1.csv")
+#run_list <- read.table("ypestisrun1", sep = "\n")
+#acces_list <- read.table("accessioninput1", sep = "\n")
 
 #------------------------------------------------------------
 
@@ -87,7 +87,7 @@ indel_user <- indelrates(usertree = tree, userphyl = userphyl)
 #print(indel_user)
 write(indel_user$results$M1$parsep$rates[1,1],file="murates.txt",append=TRUE)
 write(indel_user$results$M1$parsep$rates[2,1],file="nurates.txt",append=TRUE)
-save.image("image.Rdata")
+save.image("image.RData")
 
 #-------------------------------------------------------------------
 
