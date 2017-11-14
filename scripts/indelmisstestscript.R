@@ -85,10 +85,9 @@ set.seed(123)
 indel_user <- indelrates(usertree = tree, userphyl = userphyl)
 
 #print(indel_user)
-print(indel_user$results$M1$parsep$rates)
-print(indel_user$results$M2$parsep$rates)
-print(indel_user$results$M3$parsep$rates)
-print(indel_user$results$M4$parsep$rates)
+write(indel_user$results$M1$parsep$rates[1,1],file="murates.txt",append=TRUE)
+write(indel_user$results$M1$parsep$rates[2,1],file="nurates.txt",append=TRUE)
+save.image("image.Rdata")
 
 #-------------------------------------------------------------------
 
