@@ -78,6 +78,7 @@ data <- data %>% slice(match(c(tree$tip.label),X)) # rearranges the factors into
 # Converting data into userphyl format, which is JUST a matrix of 0s and 1s
 nums <- sapply(data, is.numeric) # Denotes which are numeric elements in the original matrix
 numonlydata <- data[,nums] # Subsets elements that are TRUE only
+numonlydata <- numonlydata[,colSums(numonlydata) != 0 ]
 userphyl <- t(numonlydata) # Transpose to fit with indelrates format
 
 # Run indelrates
