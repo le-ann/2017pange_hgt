@@ -1,116 +1,76 @@
-rm(list=ls())
-
-library(indelmiss)
-library(ape)
-
-args = commandArgs(trailingOnly=TRUE)
-
-#--------------------------------------------------------------
-
-# Salmonella error files
-# 100: 4, 11, 34, 45, 64, 79, 85 
-# 0.9: 38, 92 
-setwd("/Users/ann/thesis/2017pange_hgt/indelmiss/salmonella/")
-tree <- read.tree("treesout/outputforindelmiss38.tree")
-data <- read.csv("salm20PAmatrix/salmmatrix38.csv") # reads in matrix of twenty species, labelled by accession 
-run_list <- read.table("plasmid_roaryinput/run38", sep="\n")
-
-
-data$X.1 <- NULL #include only if there exists an extra column of numbers at the beginning (to be modified)c
-data[,1] <- run_list[,1]
-tree$tip.label <- substr(tree$tip.label,2,nchar(tree$tip.label)-1) # remove quotes
-
-library(dplyr)
-#ogdata <- data
-data <- data %>% slice(match(c(tree$tip.label),X)) # rearranges the factors into order matching tree
-
-#------------------------------------------------------------------------------#
-
-#set.seed(123) # set a seed
-#datab <-  # convert to matrix
-#userphyl <- t(datab) # transpose the matrix
-
-# Converting data into userphyl format, which is JUST a matrix of 0s and 1s
-nums <- sapply(data, is.numeric) # Denotes which are numeric elements in the original matrix
-numonlydata <- data[,nums] # Subsets elements that are TRUE only
-userphyl <- t(numonlydata) # Transpose to fit with indelrates format
-
-# Run indelrates
-set.seed(123)
-#indel_user <- indelrates(usertree = tree, userphyl = userphyl, lowlim=0.0000001, uplim = 500)
-
-verbose = FALSE 
-usertree = tree
-userphyl = userphyl
-matchtipstodata = FALSE
-datasource = "user"
-seed = 1
-taxa = 5
-brlensh = c(1,4) 
-mu = 1
-nu = 1 
-phyl = 5000
-pmiss = 0
-toi = 1
-bgtype = "listofnodes"
-bg = NULL
-zerocorrection = TRUE
-rootprob = "stationary"
-rpvec = NULL
-optmethod = "nlminb"
-init = 0.9
-lowlim = 0.001
-uplim = 1000
-numhessian = TRUE
-modelnames = c("M1","M2","M3","M4")
-
-#-----Functions included in indelmiss package---------#
-loopC <- function(nodelist, al, x, x2, pm, Lix, finind) {
-  .Call('indelmiss_loopC', PACKAGE = 'indelmiss', nodelist, al, x, x2, pm, Lix, finind)
-}
-
-allpatt_loopC <- function(nodelist, al, x, x2, pm_plc, Lix, finind) {
-  .Call('indelmiss_allpatt_loopC', PACKAGE = 'indelmiss', nodelist, al, x, x2, pm_plc, Lix, finind)
-}
-#----------------------------------------------------#
-
-ptm <- proc.time()
-bgtype <- match.arg(bgtype, c("listofnodes", "ancestornodes"))
-modelnames <- match.arg(modelnames, c("M1", "M2", "M3", "M4"), several.ok = TRUE)
-
-if (!is.null(rootprob)) 
-  rootprob <- match.arg(rootprob, c("equal", "stationary", "maxlik", "user"))
-if (datasource == "user" & is.null(usertree)) 
-  stop("usertree option is required.")
-if (any(pmiss < 0 | pmiss > 1)) stop("pmiss is the proportion of gene families that are (or are treated as) in the genome but are not observed. Should be between 0 and 1.")
-if ((is.null(userphyl) | !(is.matrix(userphyl) | is.data.frame(userphyl))) & datasource == "user") 
-  stop("userphyl option is required.")
-if (bgtype == "listofnodes" & !is.null(bg) & !is.list(bg)) 
-  stop("bg should be a vector with listofnodes argument.")
-if (bgtype == "listofnodes" & !is.null(bg) & is.list(bg)) {
-  if (!checkbglist(bg, usertree)) stop("Some branch is missing in bg.")
-}
-if (bgtype == "ancestornodes" & !is.null(bg) & !is.vector(bg)) 
-  stop("bg should be a list with ancestornodes argument.")
-if (is.null(rootprob)) 
-  stop("rootprob option is required.")
-if (datasource == "user") {
-  if (length(table(as.matrix(userphyl))) != 2) {
-    stop("Number of discrete states in the data provided does not equal 2. The discrete states allowed are 0 or 1.")
+indelrates <- function(verbose = FALSE, usertree = NULL, userphyl = NULL, matchtipstodata = FALSE, datasource = "user", seed = 1, taxa = 5, brlensh = c(1, 4), mu = 1, 
+                       nu = 1, phyl = 5000, pmiss = 0, toi = 1, bgtype = "listofnodes", bg = NULL, zerocorrection = TRUE, rootprob = "stationary", rpvec = NULL, optmethod = "nlminb", init = 0.9, lowlim = 0.001, uplim = 100,
+                       numhessian = TRUE, modelnames = c("M1", "M2", "M3", "M4"), ...) {
+  #indelrate is M1; indelandp is M2; insanddelrate is M3; insanddelandp is M4.
+  ptm <- proc.time()
+  bgtype <- match.arg(bgtype, c("listofnodes", "ancestornodes"))
+  modelnames <- match.arg(modelnames, c("M1", "M2", "M3", "M4"), several.ok = TRUE)
+  if (!is.null(rootprob)) 
+    rootprob <- match.arg(rootprob, c("equal", "stationary", "maxlik", "user"))
+  if (datasource == "user" & is.null(usertree)) 
+    stop("usertree option is required.")
+  if (any(pmiss < 0 | pmiss > 1)) stop("pmiss is the proportion of gene families that are (or are treated as) in the genome but are not observed. Should be between 0 and 1.")
+  if ((is.null(userphyl) | !(is.matrix(userphyl) | is.data.frame(userphyl))) & datasource == "user") 
+    stop("userphyl option is required.")
+  if (bgtype == "listofnodes" & !is.null(bg) & !is.list(bg)) 
+    stop("bg should be a vector with listofnodes argument.")
+  if (bgtype == "listofnodes" & !is.null(bg) & is.list(bg)) {
+    if (!checkbglist(bg, usertree)) stop("Some branch is missing in bg.")
   }
-}
-
-TPM_taxa <- function(rates, ad, ti) {
+  if (bgtype == "ancestornodes" & !is.null(bg) & !is.vector(bg)) 
+    stop("bg should be a list with ancestornodes argument.")
+  if (is.null(rootprob)) 
+    stop("rootprob option is required.")
+  if (datasource == "user") {
+    if (length(table(as.matrix(userphyl))) != 2) {
+      stop("Number of discrete states in the data provided does not equal 2. The discrete states allowed are 0 or 1.")
+    }
+  }
+  
+  if (datasource == "user") {
+    if ((nrow(userphyl) < ncol(userphyl))) {
+      warning("Looks like there are more taxa than gene families. The rows of the matrix given as the value of the userphyl argument should represent the gene families and the columns the taxa.")
+    }
+  }
+  if (is.null(datasource)) 
+    stop("datasource option is required")
+  if (datasource == "user") {
+    if (is.data.frame(userphyl)) {
+      userphyl <- as.matrix(userphyl)
+    }
+  }
+  
+  #   if (is.null(userphyl) & datasource == "user") {
+  #     stop("userphyl option is required")
+  #}
+  #if(is.numeric(toi) & !length(toi)==length(nmiss))
+  #stop("Length of vector of the number of present genes to be removed should be the same as the length of the vector of taxa of interest.")
+  set.seed(seed)
+  # singlebranch <- logical(length = 1)
+  
+  #############Libraries###################
+  libload <- function(funcval) {
+    if (requireNamespace(paste(funcval), quietly = TRUE) == FALSE) 
+      stop("Please install package dependencies before continuing.") 
+    suppressMessages(loadNamespace(funcval))
+  }
+  libload("ape")
+  libload("numDeriv")
+  libload("Rcpp")
+  #########Transition rate matrix and substitution rate matrix#######
+  TPM_taxa <- function(rates, ad, ti) {
     #Insertion rate is nu; deletion rate is mu
     j <- unlist(lapply(lapply(bg, FUN = function(X) c(ad[1], ad[2]) %in% X), FUN = "all"))
     if ((sum(j) > 1)) j[j][-which.min(unlist(lapply(bg, FUN = length)))] <- FALSE
     mu <- rates[1, j] #
     nu <- rates[2, j] #
     return(matrix(c(mu + nu * exp(-(mu + nu) * ti), nu - nu * exp(-(mu + nu) * ti), mu - mu * exp(-(mu + nu) * ti), nu + mu * exp(-(mu + 
-        nu) * ti)) * 1/(mu + nu), 2, 2, byrow = TRUE))
+                                                                                                                                      nu) * ti)) * 1/(mu + nu), 2, 2, byrow = TRUE))
   }
-
- alphabet <- c(0, 1)
+  ###########Data Generation/ Import#########
+  # lowlim = 0.01
+  # uplim = 100
+  alphabet <- c(0, 1)
   al <- length(alphabet)
   if (datasource == "user") {
     if (ape::is.binary.tree(usertree) == FALSE | ape::is.rooted(usertree) == FALSE) {
@@ -134,7 +94,6 @@ TPM_taxa <- function(rates, ad, ti) {
     nu <- NULL
     brlensh <- NULL
   }
-
   if (datasource == "simulation") {
     libload("phangorn")
     nooftaxa <- taxa
@@ -144,7 +103,6 @@ TPM_taxa <- function(rates, ad, ti) {
     datab <- matrix(as.numeric(as.character(data)), nrow = nooftaxa)
     datab <- t(datab)
   }
-
   if (bgtype == "listofnodes" & is.null(bg)) {
     bg <- list(c(1:(nooftaxa * 2 - 1)))
   } else {# if (bgtype == \listofnodes\" & !is.null(bg)) "
@@ -181,7 +139,7 @@ TPM_taxa <- function(rates, ad, ti) {
     }
     return(est_missing)
   }
-
+  ##############Parameters and Variables################
   nointnodes <- nooftaxa - 1
   tips <- 1:nooftaxa
   len_tips <- length(tips)
@@ -352,7 +310,7 @@ TPM_taxa <- function(rates, ad, ti) {
       }
     }
     if (optmethod == "nlminb") {
-      res <- nlminb(start = modelop[[i]]$start, objective = totalll, model = i, lower = modelop[[i]]$lower, upper = modelop[[i]]$upper, Lixi_in_totll = Lixi_init)
+      res <- nlminb(start = modelop[[i]]$start, objective = totalll, model = i, lower = modelop[[i]]$lower, upper = modelop[[i]]$upper, Lixi_in_totll = Lixi_init, ...)
       if (numhessian) 
         res$hessian <- numDeriv::hessian(totalll, model = i, res$par, Lixi_in_totll = Lixi_init)
       res$parsep <- bamsp(res$par, i)
@@ -360,7 +318,7 @@ TPM_taxa <- function(rates, ad, ti) {
     }
     if (optmethod == "optim") {
       res <- optim(par = modelop[[i]]$start, fn = totalll, model = i, lower = modelop[[i]]$lower, upper = modelop[[i]]$upper, hessian = TRUE, 
-                   method = "L-BFGS-B")
+                   method = "L-BFGS-B", ...)
       res$parsep <- bamsp(res$par, i)
       rownames(res$parsep$rates) <- c("mu", "nu")
     }
@@ -417,21 +375,5 @@ TPM_taxa <- function(rates, ad, ti) {
               data_red = databp_red, w = w, mu = mu, nu = nu, datasource = datasource, seed = seed, pmiss = pmiss, toi = toi, zerocorrection = zerocorrection, 
               optmethod = optmethod, brlensh = brlensh, taxa = nooftaxa, phyl = nrow(databp), rootprob = rootprob, modelnames = modelnames)
   class(val) <- "indelmiss"
-  (invisible(val))
-
-#print(indel_user)
-write(indel_user$results$M1$parsep$rates[1,1],file="murates.txt",append=TRUE)
-write(indel_user$results$M1$parsep$rates[2,1],file="nurates.txt",append=TRUE)
-#save.image("image.RData")
-save.image("indelmisserrortest.RData")
-
-
-#Warning messages:
-#1: In nlminb(start = modelop[[i]]$start, objective = totalll, model = i,  :
-#   NA/NaN function evaluation
-#2: In nlminb(start = modelop[[i]]$start, objective = totalll, model = i,  :
-#   NA/NaN function evaluation
-#3: In nlminb(start = modelop[[i]]$start, objective = totalll, model = i,  :
-#   NA/NaN function evaluation
-#4: In nlminb(start = modelop[[i]]$start, objective = totalll, model = i,  :
-#  NA/NaN function evaluation
+  return(invisible(val))
+}
