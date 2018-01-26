@@ -5,13 +5,18 @@ import sys
 
 #file = open(sys.argv[1],'r')
 
-path = '/home/ann/bacteria_assembly/s_pyogenes/gbk/ncbi-genomes-2017-07-13/namelist.csv' 
+namelist = '/home/ann/bacteria_assembly/s_pyogenes/gbk/ncbi-genomes-2017-07-13/namelist.txt' 
 
-with open('/home/ann/bacteria_assembly/s_pyogenes/gbk/ncbi-genomes-2017-07-13/namelist.csv','rb') as infile:
-	reader=csv.reader(infile)
-	with open('/home/ann/bacteria_assembly/s_pyogenes/gbk/ncbi-genomes-2017-07-13/namelist.csv', mode='wb') as outfile:
-		mydict = {rows[0]:rows[1] for rows in reader}
+namemap = {} # initiates dictionary
 
-with open(sys.argv[1],'r') as file:
+with open(namelist,'r') as csvfile:
+	reader=csv.reader(csvfile)
+	for rows in reader:
+		namemap.update({rows[0]:rows[1]})
+
+
+with open('accessioninput17','r') as file:
 	for line in file:
-		if line 
+		print(namemap[line.rstrip()])
+
+
