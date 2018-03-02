@@ -7,9 +7,9 @@
 # $3 = new, desired extension 
 #------------------------------------------------------------------------------------------
 
-for x in $1/*
+for x in roaryinput/*
 	do
-		vim -c "%s/GCA/GCF/g" -c ":%s/$2/$3/g" -c ":wq" $x
+		vim -c ":%s/GCA/GCF/g" -c ":%s/gff/fna/g" -c ":wq" $x
 	done
 
 

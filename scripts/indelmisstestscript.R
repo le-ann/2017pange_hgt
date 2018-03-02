@@ -17,7 +17,7 @@ args = commandArgs(trailingOnly=TRUE)
 #--------------Customized Laptop Files-----------------------
 # Comment out for for loop use 
 
-setwd("~/thesis/2017pange_hgt/indelmiss")
+#setwd("~/thesis/2017pange_hgt/indelmiss")
 # 
 #ogtree <- read.tree("spyogenes_rooted.tree")
 #data <- read.csv("noquotesspyognesout.csv")
@@ -26,12 +26,12 @@ setwd("~/thesis/2017pange_hgt/indelmiss")
 #-----------------------------------------------------------
 
 
-ogtree <- read.tree("../trees/rooted_pestis.tree")
-data <- read.csv("ypestismatrix1.csv")
-run_list <- read.table("ypestisrun1", sep = "\n")
-acces_list <- read.table("accessioninput1", sep = "\n")
-
-#------------------------------------------------------------
+#ogtree <- read.tree("../trees/rooted_pestis.tree")
+#data <- read.csv("ypestismatrix1.csv")
+#run_list <- read.table("ypestisrun1", sep = "\n")
+#acces_list <- read.table("accessioninput1", sep = "\n")
+#
+##------------------------------------------------------------
 
 ogtree <- read.tree(args[1]) # reads in original unclipped tree, names listed as "GCF...etc.", with roary run list
 data <- read.csv(args[2]) # reads in matrix of twenty species, labelled by accession 
