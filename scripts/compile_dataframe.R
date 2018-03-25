@@ -14,9 +14,9 @@ library(ape)
 
 args = commandArgs(trailingOnly=TRUE)
 
-dist <- read.csv(args[1])
-pange <- read.csv(args[2])
-indelrates <- read.csv(args[3])
+dist <- read.csv("distance.csv")
+pange <- read.csv("pangenome.csv")
+indelrates <- read.csv("indelrates.csv")
 
 df <- data.frame(dist,pange,indelrates)
 

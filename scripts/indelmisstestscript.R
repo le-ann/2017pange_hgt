@@ -64,6 +64,7 @@ tree <- read.tree("outputforindelmiss.tree")
 data$X.1 <- NULL #include only if there exists an extra column of numbers at the beginning (to be modified)c
 data[,1] <- run_list[,1]
 tree$tip.label <- substr(tree$tip.label,2,nchar(tree$tip.label)-1) # remove quotes
+tree$edge.length[which(tree$edge.length==0)] <- 0.00001
 
 library(dplyr)
 #ogdata <- data

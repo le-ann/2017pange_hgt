@@ -9,7 +9,7 @@
 #$1 is the directory which contains the fasta files you want to work on
 
 
-if [ "$(echo $1 | grep 'faa')" != "" ]
+if [ "$(echo $1 | grep '.faa')" != "" ]
 then 
     echo condition passes
     while read line
